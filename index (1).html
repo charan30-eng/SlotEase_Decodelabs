@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SlotEase — Book Local Services Instantly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── DESIGN TOKENS ────────────────────────────────────────── */
+    :root {
+      --navy:       #0F1B2D;
+      --navy-mid:   #162236;
+      --teal:       #00C9A7;
+      --teal-dark:  #00A88D;
+      --teal-glow:  rgba(0,201,167,0.15);
+      --coral:      #FF6B6B;
+      --white:      #F8FAFC;
+      --slate:      #64748B;
+      --slate-lt:   #94A3B8;
+      --border:     rgba(255,255,255,0.08);
+      --card-bg:    rgba(255,255,255,0.04);
+
+      --font-head:  'Montserrat', sans-serif;
+      --font-body:  'Open Sans', sans-serif;
+
+      --radius-sm:  8px;
+      --radius-md:  16px;
+      --radius-lg:  24px;
+
+      --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ─── RESET & BASE ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--navy);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── TYPOGRAPHY SCALE (fluid) ─────────────────────────────── */
+    h1 { font-family: var(--font-head); font-weight: 800; font-size: clamp(2rem, 5vw + 1rem, 4rem); line-height: 1.1; }
+    h2 { font-family: var(--font-head); font-weight: 700; font-size: clamp(1.5rem, 3vw + 0.5rem, 2.5rem); line-height: 1.2; }
+    h3 { font-family: var(--font-head); font-weight: 600; font-size: clamp(1.1rem, 2vw, 1.4rem); }
+    p  { font-size: clamp(0.95rem, 1.5vw, 1.05rem); color: var(--slate-lt); }
+
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+    ul { list-style: none; }
+
+    /* ─── UTILITY ──────────────────────────────────────────────── */
+    .teal       { color: var(--teal); }
+    .container  { width: min(100%, 1160px); margin-inline: auto; padding-inline: 1.25rem; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--teal); color: var(--navy);
+      font-family: var(--font-head); font-weight: 700; font-size: 0.95rem;
+      padding: 0.75rem 1.75rem; border-radius: 50px; border: none; cursor: pointer;
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+      box-shadow: 0 4px 24px rgba(0,201,167,0.3);
+    }
+    .btn-primary:hover { background: var(--teal-dark); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,201,167,0.4); }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: transparent; color: var(--white);
+      font-family: var(--font-head); font-weight: 600; font-size: 0.9rem;
+      padding: 0.7rem 1.5rem; border-radius: 50px; border: 1.5px solid var(--border); cursor: pointer;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .btn-outline:hover { border-color: var(--teal); background: var(--teal-glow); }
+
+    /* ─── PAGE GRID SKELETON ───────────────────────────────────── */
+    .page-grid {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 100vh;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       HEADER / NAV
+    ═══════════════════════════════════════════════════════════ */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15,27,45,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; padding: 1rem 1.25rem;
+      width: min(100%, 1160px); margin-inline: auto;
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 0.6rem;
+      font-family: var(--font-head); font-weight: 800; font-size: 1.3rem;
+    }
+    .nav-logo .logo-icon {
+      width: 36px; height: 36px; background: var(--teal);
+      border-radius: 10px; display: grid; place-items: center;
+      color: var(--navy); font-size: 1.1rem;
+    }
+
+    .nav-links {
+      display: none;
+      gap: 2rem;
+    }
+    .nav-links a {
+      font-weight: 500; font-size: 0.9rem; color: var(--slate-lt);
+      transition: color var(--transition);
+    }
+    .nav-links a:hover { color: var(--teal); }
+
+    .nav-actions { display: flex; align-items: center; gap: 0.75rem; }
+
+    .hamburger {
+      background: none; border: none; cursor: pointer;
+      display: flex; flex-direction: column; gap: 5px; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--white); border-radius: 2px;
+      transition: transform var(--transition), opacity var(--transition);
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none; flex-direction: column; gap: 0;
+      background: var(--navy-mid); border-top: 1px solid var(--border);
+      padding: 0.5rem 1.25rem 1.25rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      padding: 0.85rem 0; font-weight: 500; color: var(--slate-lt);
+      border-bottom: 1px solid var(--border); font-size: 0.95rem;
+      transition: color var(--transition);
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a:hover { color: var(--teal); }
+
+    /* ═══════════════════════════════════════════════════════════
+       MAIN CONTENT
+    ═══════════════════════════════════════════════════════════ */
+    main { display: grid; row-gap: 0; }
+
+    /* ─── HERO ─────────────────────────────────────────────────── */
+    .hero {
+      padding: 4rem 1.25rem 3rem;
+      display: grid; gap: 3rem;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% -10%, rgba(0,201,167,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--teal-glow); border: 1px solid rgba(0,201,167,0.3);
+      color: var(--teal); font-family: var(--font-head); font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.35rem 0.9rem; border-radius: 50px; margin-bottom: 1.5rem;
+    }
+    .hero-tag .pulse {
+      width: 7px; height: 7px; background: var(--teal); border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(0,201,167,0.6); }
+      50%      { box-shadow: 0 0 0 6px rgba(0,201,167,0); }
+    }
+
+    .hero h1 { margin-bottom: 1.25rem; }
+    .hero h1 em { font-style: normal; color: var(--teal); }
+    .hero > .hero-content > p { max-width: 52ch; margin-bottom: 2rem; }
+    .hero-btns { display: flex; flex-wrap: wrap; gap: 1rem; }
+
+    .hero-stats {
+      display: flex; flex-wrap: wrap; gap: 2rem;
+      padding-top: 2rem; border-top: 1px solid var(--border);
+    }
+    .stat { }
+    .stat-num { font-family: var(--font-head); font-weight: 700; font-size: 1.8rem; color: var(--teal); }
+    .stat-lbl { font-size: 0.82rem; color: var(--slate); font-weight: 500; }
+
+    /* ─── LIVE BOOKING DEMO (Signature element) ────────────────── */
+    .booking-demo {
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      position: relative; z-index: 1;
+    }
+    .demo-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;
+    }
+    .demo-header h3 { font-size: 1rem; }
+    .demo-badge {
+      background: rgba(255,107,107,0.15); color: var(--coral);
+      font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.7rem;
+      border-radius: 50px; border: 1px solid rgba(255,107,107,0.3);
+    }
+
+    .service-tabs {
+      display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem;
+    }
+    .service-tab {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--slate-lt); font-family: var(--font-body); font-size: 0.82rem;
+      padding: 0.4rem 0.9rem; border-radius: 50px; cursor: pointer;
+      transition: all var(--transition);
+    }
+    .service-tab.active {
+      background: var(--teal-glow); border-color: var(--teal); color: var(--teal);
+    }
+
+    .time-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .slot {
+      padding: 0.55rem 0; text-align: center;
+      border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 600;
+      cursor: pointer; border: 1.5px solid transparent;
+      transition: all var(--transition);
+      font-family: var(--font-body);
+    }
+    .slot.open   { background: rgba(0,201,167,0.1); color: var(--teal);   border-color: rgba(0,201,167,0.25); }
+    .slot.booked { background: rgba(100,116,139,0.1); color: var(--slate); border-color: transparent; cursor: not-allowed; text-decoration: line-through; }
+    .slot.selected { background: var(--teal); color: var(--navy); border-color: var(--teal); transform: scale(1.05); }
+    .slot.open:hover { background: rgba(0,201,167,0.2); transform: scale(1.04); }
+
+    .demo-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; flex-wrap: wrap;
+    }
+    .demo-footer p { font-size: 0.82rem; color: var(--slate); }
+    .demo-footer .teal { font-weight: 600; }
+
+    .confirm-area { display: none; margin-top: 1rem; }
+    .confirm-area.show { display: block; }
+    .confirm-box {
+      background: rgba(0,201,167,0.08); border: 1px solid rgba(0,201,167,0.3);
+      border-radius: var(--radius-sm); padding: 1rem;
+      font-size: 0.88rem; color: var(--slate-lt);
+    }
+    .confirm-box strong { color: var(--teal); display: block; margin-bottom: 0.25rem; font-size: 1rem; }
+
+    /* ─── HOW IT WORKS ─────────────────────────────────────────── */
+    .section { padding: 5rem 1.25rem; }
+    .section-label {
+      font-family: var(--font-head); font-weight: 600; font-size: 0.78rem;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal);
+      margin-bottom: 0.75rem; display: block;
+    }
+    .section-head { margin-bottom: 1rem; }
+    .section-head + p { max-width: 52ch; margin-bottom: 3rem; }
+
+    .steps-grid {
+      display: grid; gap: 1.5rem;
+      grid-template-columns: 1fr;
+    }
+    .step-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 1.75rem;
+      display: flex; flex-direction: column; gap: 1rem;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .step-card:hover { border-color: rgba(0,201,167,0.3); background: rgba(255,255,255,0.06); }
+    .step-num {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--teal-glow); border: 1px solid rgba(0,201,167,0.3);
+      display: grid; place-items: center;
+      font-family: var(--font-head); font-weight: 700; color: var(--teal); font-size: 1.1rem;
+    }
+    .step-card h3 { color: var(--white); }
+
+    /* ─── SERVICES ─────────────────────────────────────────────── */
+    .services-section { padding: 5rem 1.25rem; background: var(--navy-mid); }
+    .services-grid {
+      display: grid; gap: 1.25rem;
+      grid-template-columns: 1fr;
+    }
+    article.service-card {
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 1.5rem;
+      display: flex; flex-direction: column; gap: 0.75rem;
+      transition: border-color var(--transition), transform var(--transition);
+      cursor: pointer;
+    }
+    article.service-card:hover { border-color: rgba(0,201,167,0.3); transform: translateY(-4px); }
+    .service-icon {
+      font-size: 2rem; width: 56px; height: 56px;
+      background: var(--teal-glow); border-radius: 14px;
+      display: grid; place-items: center;
+    }
+    .service-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: auto;
+    }
+    .avail-pill {
+      font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.65rem;
+      border-radius: 50px;
+    }
+    .avail-pill.high  { background: rgba(0,201,167,0.15); color: var(--teal); }
+    .avail-pill.med   { background: rgba(255,193,7,0.15);  color: #FFC107; }
+    .avail-pill.low   { background: rgba(255,107,107,0.15);color: var(--coral); }
+    .rating { font-size: 0.82rem; color: var(--slate-lt); }
+    .rating span { color: #FBBF24; }
+
+    /* ─── TESTIMONIALS ─────────────────────────────────────────── */
+    .testimonials-section { padding: 5rem 1.25rem; }
+    .testimonials-grid {
+      display: grid; gap: 1.25rem;
+      grid-template-columns: 1fr;
+    }
+    article.testi-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 1.75rem;
+      display: flex; flex-direction: column; gap: 1.25rem;
+    }
+    .quote-mark { font-size: 2.5rem; color: var(--teal); line-height: 1; font-family: Georgia, serif; }
+    .testi-card p { color: var(--slate-lt); font-size: 0.95rem; }
+    .testi-author { display: flex; align-items: center; gap: 0.85rem; margin-top: auto; }
+    .avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: grid; place-items: center;
+      font-family: var(--font-head); font-weight: 700; font-size: 0.9rem; color: var(--navy);
+    }
+    .author-info strong { display: block; font-weight: 600; font-size: 0.9rem; }
+    .author-info span   { font-size: 0.8rem; color: var(--slate); }
+
+    /* ─── CTA BANNER ───────────────────────────────────────────── */
+    .cta-section {
+      padding: 5rem 1.25rem;
+      background: linear-gradient(135deg, rgba(0,201,167,0.08) 0%, rgba(15,27,45,0) 60%);
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+    .cta-section h2 { margin-bottom: 1rem; }
+    .cta-section p  { max-width: 48ch; margin-inline: auto; margin-bottom: 2rem; }
+    .cta-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+
+    /* ─── BOOKING MODAL ────────────────────────────────────────── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+      place-items: center; padding: 1rem;
+    }
+    .modal-overlay.open { display: grid; }
+    .modal {
+      background: var(--navy-mid); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); width: min(100%, 520px);
+      padding: 2rem; position: relative;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-close {
+      position: absolute; top: 1.25rem; right: 1.25rem;
+      background: var(--card-bg); border: 1px solid var(--border);
+      color: var(--slate-lt); font-size: 1.1rem; width: 32px; height: 32px;
+      border-radius: 50%; cursor: pointer; display: grid; place-items: center;
+      transition: background var(--transition);
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.1); }
+    .modal h3 { margin-bottom: 1.5rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1.25rem; }
+    .form-group label { font-size: 0.82rem; font-weight: 600; color: var(--slate-lt); text-transform: uppercase; letter-spacing: 0.05em; }
+    .form-group input,
+    .form-group select {
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--white);
+      font-family: var(--font-body); font-size: 0.95rem; padding: 0.7rem 1rem;
+      outline: none; transition: border-color var(--transition);
+      width: 100%;
+    }
+    .form-group input::placeholder { color: var(--slate); }
+    .form-group input:focus,
+    .form-group select:focus { border-color: var(--teal); }
+    .form-group select option { background: var(--navy-mid); }
+    .modal-footer { display: flex; gap: 0.75rem; justify-content: flex-end; flex-wrap: wrap; }
+
+    .success-msg {
+      display: none; text-align: center; padding: 1.5rem 0;
+    }
+    .success-msg.show { display: block; }
+    .success-icon { font-size: 3rem; margin-bottom: 0.75rem; }
+    .success-msg h3 { margin-bottom: 0.5rem; color: var(--teal); }
+    .reminder-note {
+      margin-top: 1rem; background: var(--teal-glow);
+      border: 1px solid rgba(0,201,167,0.3); border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem; font-size: 0.85rem; color: var(--teal);
+    }
+
+    /* ─── FOOTER ───────────────────────────────────────────────── */
+    footer {
+      background: var(--navy-mid); border-top: 1px solid var(--border);
+      padding: 3rem 1.25rem 2rem;
+    }
+    .footer-grid {
+      display: grid; gap: 2.5rem;
+      grid-template-columns: 1fr;
+    }
+    .footer-brand p { margin-top: 0.75rem; font-size: 0.9rem; max-width: 30ch; }
+    .footer-col h4 {
+      font-family: var(--font-head); font-weight: 600; font-size: 0.88rem;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--slate-lt);
+      margin-bottom: 1rem;
+    }
+    .footer-col ul { display: flex; flex-direction: column; gap: 0.6rem; }
+    .footer-col ul li a { font-size: 0.9rem; color: var(--slate); transition: color var(--transition); }
+    .footer-col ul li a:hover { color: var(--teal); }
+
+    .footer-bottom {
+      margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);
+      display: flex; flex-wrap: wrap; gap: 1rem;
+      align-items: center; justify-content: space-between;
+    }
+    .footer-bottom p { font-size: 0.82rem; color: var(--slate); }
+
+    /* ─── NOTIFICATION TOAST ───────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(100px);
+      background: var(--navy-mid); border: 1px solid rgba(0,201,167,0.4);
+      color: var(--white); font-size: 0.88rem; font-family: var(--font-body);
+      padding: 0.8rem 1.25rem; border-radius: 50px; z-index: 500;
+      display: flex; align-items: center; gap: 0.6rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast .dot { width: 8px; height: 8px; background: var(--teal); border-radius: 50%; flex-shrink: 0; }
+
+    /* ─── SKIP LINK ────────────────────────────────────────────── */
+    .skip-link {
+      position: absolute; top: -100px; left: 1rem;
+      background: var(--teal); color: var(--navy); font-weight: 700;
+      padding: 0.5rem 1rem; border-radius: 0 0 8px 8px; z-index: 999;
+      transition: top 0.2s;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* ═══════════════════════════════════════════════════════════
+       RESPONSIVE — TABLET 768px
+    ═══════════════════════════════════════════════════════════ */
+    @media (min-width: 768px) {
+      .nav-links  { display: flex; }
+      .hamburger  { display: none; }
+      .mobile-menu { display: none !important; }
+
+      .hero { grid-template-columns: 1fr 1fr; align-items: center; padding: 5rem 1.25rem; }
+      .hero::before { background: radial-gradient(ellipse 80% 70% at 70% 50%, rgba(0,201,167,0.1) 0%, transparent 70%); }
+
+      .steps-grid      { grid-template-columns: repeat(2, 1fr); }
+      .services-grid   { grid-template-columns: repeat(2, 1fr); }
+      .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid     { grid-template-columns: 2fr 1fr 1fr; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       RESPONSIVE — DESKTOP 1024px
+    ═══════════════════════════════════════════════════════════ */
+    @media (min-width: 1024px) {
+      .steps-grid      { grid-template-columns: repeat(4, 1fr); }
+      .services-grid   { grid-template-columns: repeat(4, 1fr); }
+      .testimonials-grid { grid-template-columns: repeat(3, 1fr); }
+      .footer-grid     { grid-template-columns: 2fr 1fr 1fr 1fr; }
+
+      .hero { padding: 6rem 1.25rem; }
+      .section { padding: 6rem 1.25rem; }
+      .services-section { padding: 6rem 1.25rem; }
+      .testimonials-section { padding: 6rem 1.25rem; }
+    }
+
+    /* ─── REDUCED MOTION ───────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Skip to main content for screen readers -->
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<!-- ════════════════════════════════
+     HEADER
+════════════════════════════════ -->
+<div class="page-grid">
+<header role="banner">
+  <nav role="navigation" aria-label="Main navigation">
+    <div class="nav-logo">
+      <div class="logo-icon" aria-hidden="true">⚡</div>
+      <span>Slot<em class="teal">Ease</em></span>
+    </div>
+
+    <ul class="nav-links" role="list">
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#reviews">Reviews</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="btn-outline" onclick="openModal()" aria-label="Sign in to your account">Sign In</button>
+      <button class="btn-primary" onclick="openModal()" aria-label="Book a service now">Book Now</button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobile-nav" role="navigation" aria-label="Mobile navigation">
+    <a href="#how-it-works" onclick="closeMobileMenu()">How It Works</a>
+    <a href="#services"     onclick="closeMobileMenu()">Services</a>
+    <a href="#reviews"      onclick="closeMobileMenu()">Reviews</a>
+    <a href="#contact"      onclick="closeMobileMenu()">Contact</a>
+  </div>
+</header>
+
+<!-- ════════════════════════════════
+     MAIN
+════════════════════════════════ -->
+<main id="main-content" role="main">
+
+  <!-- HERO -->
+  <section class="hero container" aria-labelledby="hero-heading">
+    <div class="hero-content">
+      <div class="hero-tag" aria-label="Live bookings available now">
+        <span class="pulse" aria-hidden="true"></span>
+        Live Bookings Now Open
+      </div>
+      <h1 id="hero-heading">
+        Book Local Services <em>Instantly.</em><br>No Calls. No Hassle.
+      </h1>
+      <p>Plumbers, electricians, tutors, salons — see real-time availability and lock in your slot in under 60 seconds. Automated reminders keep everyone on the same page.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="openModal()">
+          📅 Book a Slot
+        </button>
+        <a href="#how-it-works" class="btn-outline">See How It Works</a>
+      </div>
+
+      <div class="hero-stats" role="list" aria-label="Platform statistics">
+        <div class="stat" role="listitem">
+          <div class="stat-num" aria-label="12,000 plus bookings">12k+</div>
+          <div class="stat-lbl">Bookings Made</div>
+        </div>
+        <div class="stat" role="listitem">
+          <div class="stat-num" aria-label="840 plus providers">840+</div>
+          <div class="stat-lbl">Local Providers</div>
+        </div>
+        <div class="stat" role="listitem">
+          <div class="stat-num" aria-label="98 percent on time">98%</div>
+          <div class="stat-lbl">On-Time Rate</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIVE BOOKING DEMO -->
+    <div class="booking-demo" role="region" aria-label="Live slot booking demo">
+      <div class="demo-header">
+        <h3>🔧 Available Today — Plumber</h3>
+        <span class="demo-badge" aria-live="polite">● 3 slots left</span>
+      </div>
+
+      <div class="service-tabs" role="tablist" aria-label="Select service type">
+        <button class="service-tab active" role="tab" aria-selected="true"  onclick="switchTab(this,'Plumber')">🔧 Plumber</button>
+        <button class="service-tab"        role="tab" aria-selected="false" onclick="switchTab(this,'Electrician')">⚡ Electrician</button>
+        <button class="service-tab"        role="tab" aria-selected="false" onclick="switchTab(this,'Tutor')">📚 Tutor</button>
+        <button class="service-tab"        role="tab" aria-selected="false" onclick="switchTab(this,'Salon')">✂️ Salon</button>
+      </div>
+
+      <div class="time-grid" id="slot-grid" role="group" aria-label="Available time slots">
+        <!-- Slots injected by JS -->
+      </div>
+
+      <div class="demo-footer">
+        <p>Select a slot above • <span class="teal" id="selected-display">None selected</span></p>
+        <button class="btn-primary" id="confirm-btn" onclick="confirmSlot()" disabled aria-label="Confirm selected time slot" style="font-size:0.85rem;padding:0.6rem 1.25rem;">Confirm Slot</button>
+      </div>
+
+      <div class="confirm-area" id="confirm-area" aria-live="polite">
+        <div class="confirm-box">
+          <strong>✅ Slot Confirmed!</strong>
+          <span id="confirm-text">Your booking has been saved. SMS & email reminders are on their way.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section container" id="how-it-works" aria-labelledby="how-heading">
+    <span class="section-label" aria-hidden="true">The Process</span>
+    <h2 class="section-head" id="how-heading">From problem to booked in four steps</h2>
+    <p>No more phone tag. No double bookings. Just a smooth, automated experience for both you and your service provider.</p>
+
+    <div class="steps-grid" role="list">
+      <article class="step-card" role="listitem">
+        <div class="step-num" aria-hidden="true">1</div>
+        <h3>Choose a Service</h3>
+        <p>Browse from plumbers, electricians, tutors, salons and more — all verified local professionals.</p>
+      </article>
+      <article class="step-card" role="listitem">
+        <div class="step-num" aria-hidden="true">2</div>
+        <h3>See Real-Time Slots</h3>
+        <p>Live availability synced to the provider's calendar — you only see slots that are actually open.</p>
+      </article>
+      <article class="step-card" role="listitem">
+        <div class="step-num" aria-hidden="true">3</div>
+        <h3>Confirm Instantly</h3>
+        <p>Pick your slot and confirm in one tap. The provider's diary updates immediately, zero conflicts.</p>
+      </article>
+      <article class="step-card" role="listitem">
+        <div class="step-num" aria-hidden="true">4</div>
+        <h3>Auto Reminders Sent</h3>
+        <p>Both you and the provider receive SMS and email reminders — 24 hours and 1 hour before the appointment.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services-section" id="services" aria-labelledby="services-heading">
+    <div class="container">
+      <span class="section-label" aria-hidden="true">Our Services</span>
+      <h2 class="section-head" id="services-heading">Every local service, one platform</h2>
+      <p>Trusted professionals across every home and personal service category, available near you.</p>
+
+      <div class="services-grid" role="list">
+        <article class="service-card" role="listitem" tabindex="0" onclick="openModalWithService('Plumber')" onkeydown="if(event.key==='Enter')openModalWithService('Plumber')" aria-label="Book a plumber">
+          <div class="service-icon" aria-hidden="true">🔧</div>
+          <h3>Plumber</h3>
+          <p>Leak repairs, pipe fitting, drain unblocking — fully licensed professionals.</p>
+          <div class="service-meta">
+            <span class="avail-pill high">High Availability</span>
+            <span class="rating"><span aria-hidden="true">★</span> 4.9 (312)</span>
+          </div>
+        </article>
+
+        <article class="service-card" role="listitem" tabindex="0" onclick="openModalWithService('Electrician')" onkeydown="if(event.key==='Enter')openModalWithService('Electrician')" aria-label="Book an electrician">
+          <div class="service-icon" aria-hidden="true">⚡</div>
+          <h3>Electrician</h3>
+          <p>Wiring, fuse boards, lighting installation — all work certified and guaranteed.</p>
+          <div class="service-meta">
+            <span class="avail-pill med">Moderate Slots</span>
+            <span class="rating"><span aria-hidden="true">★</span> 4.8 (198)</span>
+          </div>
+        </article>
+
+        <article class="service-card" role="listitem" tabindex="0" onclick="openModalWithService('Tutor')" onkeydown="if(event.key==='Enter')openModalWithService('Tutor')" aria-label="Book a tutor">
+          <div class="service-icon" aria-hidden="true">📚</div>
+          <h3>Tutor</h3>
+          <p>Maths, sciences, languages — experienced educators for all ages and levels.</p>
+          <div class="service-meta">
+            <span class="avail-pill high">High Availability</span>
+            <span class="rating"><span aria-hidden="true">★</span> 4.9 (445)</span>
+          </div>
+        </article>
+
+        <article class="service-card" role="listitem" tabindex="0" onclick="openModalWithService('Salon')" onkeydown="if(event.key==='Enter')openModalWithService('Salon')" aria-label="Book a salon appointment">
+          <div class="service-icon" aria-hidden="true">✂️</div>
+          <h3>Salon</h3>
+          <p>Hair, beauty, and grooming services — browse stylist profiles and book directly.</p>
+          <div class="service-meta">
+            <span class="avail-pill low">Few Slots Left</span>
+            <span class="rating"><span aria-hidden="true">★</span> 4.7 (267)</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section" id="reviews" aria-labelledby="reviews-heading">
+    <div class="container">
+      <span class="section-label" aria-hidden="true">Real Stories</span>
+      <h2 class="section-head" id="reviews-heading">People actually love it</h2>
+      <p>Customers and service providers both save time — which is the whole point.</p>
+
+      <div class="testimonials-grid" role="list">
+        <article class="testi-card" role="listitem">
+          <div class="quote-mark" aria-hidden="true">"</div>
+          <p>I used to spend 45 minutes on hold just to book a plumber. SlotEase took me two minutes and he showed up exactly when the reminder said.</p>
+          <div class="testi-author">
+            <div class="avatar" style="background:#4F46E5" aria-hidden="true">PR</div>
+            <div class="author-info">
+              <strong>Priya R.</strong>
+              <span>Homeowner, Chennai</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="testi-card" role="listitem">
+          <div class="quote-mark" aria-hidden="true">"</div>
+          <p>My no-show rate dropped from 20% to under 3%. The automatic reminders do the chasing so I can focus on actual work.</p>
+          <div class="testi-author">
+            <div class="avatar" style="background:#059669" aria-hidden="true">MK</div>
+            <div class="author-info">
+              <strong>Mohammed K.</strong>
+              <span>Electrician, 6 years on platform</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="testi-card" role="listitem">
+          <div class="quote-mark" aria-hidden="true">"</div>
+          <p>Running a salon means constant scheduling chaos. This system lets my team focus on clients instead of phones. Complete game changer.</p>
+          <div class="testi-author">
+            <div class="avatar" style="background:#DC2626" aria-hidden="true">SL</div>
+            <div class="author-info">
+              <strong>Sneha L.</strong>
+              <span>Salon Owner, 3 locations</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" aria-labelledby="cta-heading">
+    <div class="container">
+      <h2 id="cta-heading">Stop playing phone tag.<br>Book your first slot free.</h2>
+      <p>Join 12,000+ customers and 840+ providers already running their schedules on SlotEase.</p>
+      <div class="cta-btns">
+        <button class="btn-primary" onclick="openModal()">📅 Book a Slot — It's Free</button>
+        <button class="btn-outline" onclick="openModal()">List Your Business</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ════════════════════════════════
+     FOOTER
+════════════════════════════════ -->
+<footer id="contact" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">
+          <div class="logo-icon" aria-hidden="true">⚡</div>
+          <span>Slot<span class="teal">Ease</span></span>
+        </div>
+        <p>Real-time local service bookings. No phone calls, no paper diaries — just seamless scheduling.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Plumbers</a></li>
+          <li><a href="#services">Electricians</a></li>
+          <li><a href="#services">Tutors</a></li>
+          <li><a href="#services">Salons</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">For Providers</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Help Centre</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Use</a></li>
+          <li><a href="mailto:hello@slotease.in">hello@slotease.in</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 SlotEase. All rights reserved.</p>
+      <p>Made with ❤️ for local communities</p>
+    </div>
+  </div>
+</footer>
+</div><!-- .page-grid -->
+
+<!-- ════════════════════════════════
+     BOOKING MODAL
+════════════════════════════════ -->
+<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close booking dialog">✕</button>
+
+    <div id="modal-form-content">
+      <h3 id="modal-title">📅 Book a Slot</h3>
+
+      <div class="form-group">
+        <label for="book-name">Your Name</label>
+        <input type="text" id="book-name" placeholder="e.g. Arjun Sharma" autocomplete="name" />
+      </div>
+      <div class="form-group">
+        <label for="book-phone">Phone Number</label>
+        <input type="tel" id="book-phone" placeholder="+91 98765 43210" autocomplete="tel" />
+      </div>
+      <div class="form-group">
+        <label for="book-service">Service Needed</label>
+        <select id="book-service" aria-label="Select service type">
+          <option value="">Select a service…</option>
+          <option value="Plumber">🔧 Plumber</option>
+          <option value="Electrician">⚡ Electrician</option>
+          <option value="Tutor">📚 Tutor</option>
+          <option value="Salon">✂️ Salon</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="book-date">Preferred Date</label>
+        <input type="date" id="book-date" />
+      </div>
+      <div class="form-group">
+        <label for="book-time">Preferred Time</label>
+        <select id="book-time" aria-label="Select preferred time">
+          <option value="">Choose a time slot…</option>
+          <option value="9:00 AM">9:00 AM</option>
+          <option value="10:00 AM">10:00 AM</option>
+          <option value="11:00 AM">11:00 AM</option>
+          <option value="1:00 PM">1:00 PM</option>
+          <option value="2:00 PM">2:00 PM</option>
+          <option value="3:00 PM">3:00 PM</option>
+          <option value="4:00 PM">4:00 PM</option>
+        </select>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="closeModal()">Cancel</button>
+        <button class="btn-primary" onclick="submitBooking()">Confirm Booking</button>
+      </div>
+    </div>
+
+    <div class="success-msg" id="modal-success" aria-live="polite">
+      <div class="success-icon">🎉</div>
+      <h3>You're all booked!</h3>
+      <p id="success-detail">Your appointment has been confirmed.</p>
+      <div class="reminder-note">
+        📲 Reminders will be sent <strong>24 hours</strong> and <strong>1 hour</strong> before your appointment via SMS and email.
+      </div>
+      <button class="btn-primary" style="margin-top:1.5rem;width:100%;justify-content:center;" onclick="closeModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span class="dot" aria-hidden="true"></span>
+  <span id="toast-msg">Reminder scheduled!</span>
+</div>
+
+<!-- ════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════ -->
+<script>
+  /* ── STATE ────────────────────────────────────────── */
+  const slotData = {
+    Plumber:     ['9:00 AM','booked','10:00 AM','11:00 AM','booked','12:00 PM','booked','1:00 PM','2:00 PM','booked','3:00 PM','4:00 PM'],
+    Electrician: ['booked','9:30 AM','booked','11:00 AM','booked','12:30 PM','1:00 PM','booked','3:00 PM','3:30 PM','booked','5:00 PM'],
+    Tutor:       ['8:00 AM','9:00 AM','10:00 AM','booked','11:00 AM','booked','1:00 PM','2:00 PM','booked','3:00 PM','4:00 PM','5:00 PM'],
+    Salon:       ['9:00 AM','booked','booked','11:00 AM','booked','booked','1:00 PM','booked','booked','3:30 PM','booked','booked'],
+  };
+
+  let currentService = 'Plumber';
+  let selectedSlot   = null;
+  let bookedByUser   = [];
+
+  /* ── RENDER SLOTS ─────────────────────────────────── */
+  function renderSlots(service) {
+    const grid = document.getElementById('slot-grid');
+    grid.innerHTML = '';
+    const slots = slotData[service] || [];
+    let openCount = 0;
+
+    slots.forEach((slot, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'slot';
+      btn.setAttribute('aria-label', slot === 'booked' ? 'Unavailable slot' : `Book ${slot}`);
+
+      if (slot === 'booked' || bookedByUser.includes(service + ':' + slot)) {
+        btn.classList.add('booked');
+        btn.textContent = slot === 'booked' ? 'Booked' : slot;
+        btn.disabled = true;
+        btn.setAttribute('aria-disabled', 'true');
+      } else {
+        btn.classList.add('open');
+        btn.textContent = slot;
+        openCount++;
+        btn.addEventListener('click', () => selectSlot(btn, slot, service));
+      }
+      grid.appendChild(btn);
+    });
+
+    document.querySelector('.demo-badge').textContent = `● ${openCount} slot${openCount !== 1 ? 's' : ''} left`;
+    resetSelection();
+  }
+
+  function selectSlot(btn, slot, service) {
+    document.querySelectorAll('.slot.open, .slot.selected').forEach(s => {
+      s.classList.remove('selected');
+      s.classList.add('open');
+    });
+    btn.classList.remove('open');
+    btn.classList.add('selected');
+    selectedSlot = { slot, service };
+    document.getElementById('selected-display').textContent = slot;
+    document.getElementById('confirm-btn').disabled = false;
+    document.getElementById('confirm-area').classList.remove('show');
+  }
+
+  function resetSelection() {
+    selectedSlot = null;
+    document.getElementById('selected-display').textContent = 'None selected';
+    document.getElementById('confirm-btn').disabled = true;
+    document.getElementById('confirm-area').classList.remove('show');
+  }
+
+  function confirmSlot() {
+    if (!selectedSlot) return;
+    const { slot, service } = selectedSlot;
+    bookedByUser.push(service + ':' + slot);
+
+    document.getElementById('confirm-text').textContent =
+      `${service} at ${slot} is locked in. SMS & email reminders are on their way.`;
+    document.getElementById('confirm-area').classList.add('show');
+
+    renderSlots(service);
+    showToast('📅 Booking confirmed — reminders scheduled!');
+  }
+
+  /* ── TAB SWITCH ───────────────────────────────────── */
+  function switchTab(el, service) {
+    document.querySelectorAll('.service-tab').forEach(t => {
+      t.classList.remove('active');
+      t.setAttribute('aria-selected', 'false');
+    });
+    el.classList.add('active');
+    el.setAttribute('aria-selected', 'true');
+    currentService = service;
+    document.querySelector('.demo-header h3').textContent =
+      el.textContent.trim() + ' — Available Today';
+    renderSlots(service);
+  }
+
+  /* ── MOBILE MENU ──────────────────────────────────── */
+  const hamburger  = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-nav');
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen);
+  });
+
+  function closeMobileMenu() {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+  }
+
+  /* ── MODAL ────────────────────────────────────────── */
+  function openModal(service) {
+    const overlay = document.getElementById('modal-overlay');
+    overlay.classList.add('open');
+    document.getElementById('modal-form-content').style.display = 'block';
+    document.getElementById('modal-success').classList.remove('show');
+    if (service) {
+      const sel = document.getElementById('book-service');
+      sel.value = service;
+    }
+    // Set min date to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('book-date').min = today;
+    document.getElementById('book-name').focus();
+  }
+
+  function openModalWithService(service) { openModal(service); }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    // Reset form
+    document.getElementById('book-name').value  = '';
+    document.getElementById('book-phone').value = '';
+    document.getElementById('book-service').value = '';
+    document.getElementById('book-date').value  = '';
+    document.getElementById('book-time').value  = '';
+  }
+
+  // Close modal on overlay click
+  document.getElementById('modal-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // Close modal on Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  function submitBooking() {
+    const name    = document.getElementById('book-name').value.trim();
+    const phone   = document.getElementById('book-phone').value.trim();
+    const service = document.getElementById('book-service').value;
+    const date    = document.getElementById('book-date').value;
+    const time    = document.getElementById('book-time').value;
+
+    if (!name || !phone || !service || !date || !time) {
+      showToast('⚠️ Please fill in all fields');
+      return;
+    }
+
+    const dateFormatted = new Date(date).toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long' });
+    document.getElementById('success-detail').textContent =
+      `${service} on ${dateFormatted} at ${time} — confirmed for ${name}.`;
+
+    document.getElementById('modal-form-content').style.display = 'none';
+    document.getElementById('modal-success').classList.add('show');
+
+    showToast('📲 Reminders scheduled — you\'re all set!');
+  }
+
+  /* ── TOAST ────────────────────────────────────────── */
+  let toastTimer;
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+  }
+
+  /* ── INIT ─────────────────────────────────────────── */
+  renderSlots('Plumber');
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        closeMobileMenu();
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
